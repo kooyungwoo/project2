@@ -9,6 +9,8 @@ import { commonCodeAtom } from "@/atoms/commonCodeAtom"
 import { useCommonQuery } from "@/hooks/useCommonQuery"
 import { apiClient } from "@/lib/apiClient"
 
+/* { children } -> props 객체를 구조분해해서 children만 꺼내 쓰는 함수 매개변수 구조분해 */
+/* Layout(props) 이렇게 받을수도 있음, 이 경우 props.children 으로 사용 */
 export default function Layout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const setCommonCode = useSetAtom(commonCodeAtom)
@@ -34,6 +36,7 @@ export default function Layout({ children }) {
             <div className="flex flex-1">
                 <Sidebar sidebarOpen={sidebarOpen}/>
                 <main className="flex-1 p-6 bg-white dark:bg-gray-900 overflow-y-auto">
+                {/* 기본은 Outlet children 은 만약의 상황을 위해 추가 */}
                 {children ?? <Outlet />}
                 </main>
             </div>

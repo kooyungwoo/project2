@@ -18,8 +18,9 @@ import { commonCodeAtom } from '@/atoms/commonCodeAtom'
 
 
 export default function DefaultForm({ searchResult }) {
+  /* 공통코드 조회결과 구독 */
   const commonCodes = useAtomValue(commonCodeAtom)
-
+  /* 폼의 초기값 정의(reset에도 활용) */
   const initialValues = {
     dataId: "",
     title: "",
@@ -27,7 +28,6 @@ export default function DefaultForm({ searchResult }) {
     status: "1",
     printable: false,
   }
-
 
   /* react-hook-form을 사용하여 폼 상태 관리(이렇게 하면 vue3의 reactive 상태 관리와 유사, form기준 으로만 동작) */
   const form = useForm({
@@ -50,7 +50,7 @@ export default function DefaultForm({ searchResult }) {
     }
   }, [searchResult, reset])
 
-
+  /* 폼 저장 처리, saveMutate을 사용하여 폼 데이터 저장(정의된 saveSampleForm 사용) */
   const { ui: saveUi, mutate: saveMutate } = useCommonMutation(
     saveSampleForm,
     { retry: 0,
@@ -64,11 +64,12 @@ export default function DefaultForm({ searchResult }) {
       }
     }
   )
-
+  /* 폼 제출 핸들러 saveMutate 호출 */
   const onSubmit = (data) => {
     saveMutate(data)
   } 
 
+  /* 삭제 처리, deleteMutate을 사용하여 데이터 삭제(정의된 deleteSampleForm 사용) */
   const { ui: deleteUi, mutate: deleteMutate } = useCommonMutation(
     deleteSampleForm,
     { retry: 0,
@@ -81,7 +82,7 @@ export default function DefaultForm({ searchResult }) {
       }
     }
   )
-
+  /* 삭제 핸들러 deleteMutate 호출 */
   const onDelete = () => {
     const result = deleteSchema.safeParse({dataId: form.getValues().dataId})
     if (!result.success) {
@@ -130,8 +131,8 @@ export default function DefaultForm({ searchResult }) {
             label="상태"
             placeholder="상태 선택"
             options={commonCodes
-          .filter(code => code.commonGroupCd === "FORM_GUBUN")
-          .map(code => ({ value: code.commonValue, label: code.commonName }))}
+                    .filter(code => code.commonGroupCd === "FORM_GUBUN")
+                    .map(code => ({ value: code.commonValue, label: code.commonName }))}
         />
 
         {/* 출력 여부 체크박스 */}

@@ -13,6 +13,7 @@ export function useCommonQuery(queryKey, queryFn, options = {}) {
     enabled: true, /* 쿼리 활성화 여부 */
   }
 
+  /* 병합된 옵션(defaultOptions:기본옵션 <- options:사용용자정의옵션 덮어쓰기) */
   const mergedOptions = { ...defaultOptions, ...options }
 
   const { data, isLoading, error, refetch  } = useQuery({
@@ -21,8 +22,10 @@ export function useCommonQuery(queryKey, queryFn, options = {}) {
     ...mergedOptions,
   })
 
+  /* 로딩 및 에러 처리(로딩 및 에러 UI 반환) */
   if (isLoading) return { ui: <Loading /> }
   if (error) return { ui: <ErrorBoundary /> }
 
+  /* 쿼리 결과 반환(ui: 정상이라 아무것도 없음, data: 쿼리 결과, refetch: 재조회 함수) */
   return { ui: null, data, refetch }
 }
