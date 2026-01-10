@@ -2,6 +2,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 // vite-plugin-router가 자동 생성하는 파일
 import { routeTree } from './routeTree.gen'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { GlobalErrorDialog } from "@/components/GlobalErrorDialog"
 
 const queryClient = new QueryClient()
 
@@ -11,6 +12,7 @@ const router = createRouter({ routeTree })
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <GlobalErrorDialog />
       <RouterProvider router={router} />
     </QueryClientProvider>
   )

@@ -10,6 +10,8 @@ export default function Sidebar({ sidebarOpen }) {
           <nav className="space-y-2">
             <Link to="/page/sample/form" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">폼 샘플 페이지</Link>
             <Link to="/page/sample/grid" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">그리드 샘플 페이지</Link>
+            <Link to="/page/sample/popup" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">팝업 샘플 페이지</Link>
+            <Link to="/page/sample/error" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">error 샘플 페이지</Link>
           </nav>
         </aside> 
     )
