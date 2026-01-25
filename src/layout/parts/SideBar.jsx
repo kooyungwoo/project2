@@ -12,6 +12,7 @@ export default function Sidebar({ sidebarOpen }) {
             <Link to="/page/sample/grid" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">그리드 샘플 페이지</Link>
             <Link to="/page/sample/popup" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">팝업 샘플 페이지</Link>
             <Link to="/page/sample/error" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">error 샘플 페이지</Link>
+            <Link to="/page/sample/file" className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">file 샘플 페이지</Link>
           </nav>
         </aside> 
     )

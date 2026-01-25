@@ -16,11 +16,23 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 
-export function DynamicFormField({ control, type, name, label, placeholder, options }) {
+export function DynamicFormField({ control, type, name, label, placeholder, options, props, onChange }) {
   const renderControl = (field) => {
     switch (type) {
       case "input":
         return <Input placeholder={placeholder} {...field} />
+      case "hidden":
+        return <Input type="hidden" {...field} />
+      case "file":
+        return <Input
+              type="file"
+              multiple
+              {...props}
+              onChange={(e) => {
+                onChange?.(e)          // 커스텀 업로드 로직
+                field.onChange(e.target.files) // RHF에 파일 전달
+              }}
+            />
       case "textarea":
         return <Textarea placeholder={placeholder} {...field} />
       case "select":

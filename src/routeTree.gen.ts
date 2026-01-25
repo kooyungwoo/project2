@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PageRouteRouteImport } from './routes/page/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PageSamplePopupIndexRouteImport } from './routes/page/sample/popup/index'
 import { Route as PageSampleGridIndexRouteImport } from './routes/page/sample/grid/index'
 import { Route as PageSampleFormIndexRouteImport } from './routes/page/sample/form/index'
+import { Route as PageSampleFileIndexRouteImport } from './routes/page/sample/file/index'
+import { Route as PageSampleErrorIndexRouteImport } from './routes/page/sample/error/index'
 
 const PageRouteRoute = PageRouteRouteImport.update({
   id: '/page',
@@ -24,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PageSamplePopupIndexRoute = PageSamplePopupIndexRouteImport.update({
+  id: '/sample/popup/',
+  path: '/sample/popup/',
+  getParentRoute: () => PageRouteRoute,
+} as any)
 const PageSampleGridIndexRoute = PageSampleGridIndexRouteImport.update({
   id: '/sample/grid/',
   path: '/sample/grid/',
@@ -34,32 +42,73 @@ const PageSampleFormIndexRoute = PageSampleFormIndexRouteImport.update({
   path: '/sample/form/',
   getParentRoute: () => PageRouteRoute,
 } as any)
+const PageSampleFileIndexRoute = PageSampleFileIndexRouteImport.update({
+  id: '/sample/file/',
+  path: '/sample/file/',
+  getParentRoute: () => PageRouteRoute,
+} as any)
+const PageSampleErrorIndexRoute = PageSampleErrorIndexRouteImport.update({
+  id: '/sample/error/',
+  path: '/sample/error/',
+  getParentRoute: () => PageRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/page': typeof PageRouteRouteWithChildren
+  '/page/sample/error': typeof PageSampleErrorIndexRoute
+  '/page/sample/file': typeof PageSampleFileIndexRoute
   '/page/sample/form': typeof PageSampleFormIndexRoute
   '/page/sample/grid': typeof PageSampleGridIndexRoute
+  '/page/sample/popup': typeof PageSamplePopupIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/page': typeof PageRouteRouteWithChildren
+  '/page/sample/error': typeof PageSampleErrorIndexRoute
+  '/page/sample/file': typeof PageSampleFileIndexRoute
   '/page/sample/form': typeof PageSampleFormIndexRoute
   '/page/sample/grid': typeof PageSampleGridIndexRoute
+  '/page/sample/popup': typeof PageSamplePopupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/page': typeof PageRouteRouteWithChildren
+  '/page/sample/error/': typeof PageSampleErrorIndexRoute
+  '/page/sample/file/': typeof PageSampleFileIndexRoute
   '/page/sample/form/': typeof PageSampleFormIndexRoute
   '/page/sample/grid/': typeof PageSampleGridIndexRoute
+  '/page/sample/popup/': typeof PageSamplePopupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/page' | '/page/sample/form' | '/page/sample/grid'
+  fullPaths:
+    | '/'
+    | '/page'
+    | '/page/sample/error'
+    | '/page/sample/file'
+    | '/page/sample/form'
+    | '/page/sample/grid'
+    | '/page/sample/popup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/page' | '/page/sample/form' | '/page/sample/grid'
-  id: '__root__' | '/' | '/page' | '/page/sample/form/' | '/page/sample/grid/'
+  to:
+    | '/'
+    | '/page'
+    | '/page/sample/error'
+    | '/page/sample/file'
+    | '/page/sample/form'
+    | '/page/sample/grid'
+    | '/page/sample/popup'
+  id:
+    | '__root__'
+    | '/'
+    | '/page'
+    | '/page/sample/error/'
+    | '/page/sample/file/'
+    | '/page/sample/form/'
+    | '/page/sample/grid/'
+    | '/page/sample/popup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/page/sample/popup/': {
+      id: '/page/sample/popup/'
+      path: '/sample/popup'
+      fullPath: '/page/sample/popup'
+      preLoaderRoute: typeof PageSamplePopupIndexRouteImport
+      parentRoute: typeof PageRouteRoute
+    }
     '/page/sample/grid/': {
       id: '/page/sample/grid/'
       path: '/sample/grid'
@@ -97,17 +153,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PageSampleFormIndexRouteImport
       parentRoute: typeof PageRouteRoute
     }
+    '/page/sample/file/': {
+      id: '/page/sample/file/'
+      path: '/sample/file'
+      fullPath: '/page/sample/file'
+      preLoaderRoute: typeof PageSampleFileIndexRouteImport
+      parentRoute: typeof PageRouteRoute
+    }
+    '/page/sample/error/': {
+      id: '/page/sample/error/'
+      path: '/sample/error'
+      fullPath: '/page/sample/error'
+      preLoaderRoute: typeof PageSampleErrorIndexRouteImport
+      parentRoute: typeof PageRouteRoute
+    }
   }
 }
 
 interface PageRouteRouteChildren {
+  PageSampleErrorIndexRoute: typeof PageSampleErrorIndexRoute
+  PageSampleFileIndexRoute: typeof PageSampleFileIndexRoute
   PageSampleFormIndexRoute: typeof PageSampleFormIndexRoute
   PageSampleGridIndexRoute: typeof PageSampleGridIndexRoute
+  PageSamplePopupIndexRoute: typeof PageSamplePopupIndexRoute
 }
 
 const PageRouteRouteChildren: PageRouteRouteChildren = {
+  PageSampleErrorIndexRoute: PageSampleErrorIndexRoute,
+  PageSampleFileIndexRoute: PageSampleFileIndexRoute,
   PageSampleFormIndexRoute: PageSampleFormIndexRoute,
   PageSampleGridIndexRoute: PageSampleGridIndexRoute,
+  PageSamplePopupIndexRoute: PageSamplePopupIndexRoute,
 }
 
 const PageRouteRouteWithChildren = PageRouteRoute._addFileChildren(

@@ -26,6 +26,13 @@ export const Route = createFileRoute('/')({
       >
         <Link to="/page/sample/popup">팝업 샘플 페이지</Link>
       </Button>
+      <Button
+        asChild
+        variant="outline"
+        size="sm"
+      >
+        <Link to="/page/sample/file">파일 샘플 페이지</Link>
+      </Button>
     </div>
   ),
 })
