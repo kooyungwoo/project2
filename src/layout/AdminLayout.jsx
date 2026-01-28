@@ -8,6 +8,7 @@ import { useSetAtom } from "jotai"
 import { commonCodeAtom } from "@/atoms/commonCodeAtom"
 import { useCommonQuery } from "@/hooks/useCommonQuery"
 import { apiClient } from "@/lib/apiClient"
+import PropTypes from "prop-types"
 
 /* { children } -> props 객체를 구조분해해서 children만 꺼내 쓰는 함수 매개변수 구조분해 */
 /* Layout(props) 이렇게 받을수도 있음, 이 경우 props.children 으로 사용 */
@@ -44,4 +45,8 @@ export default function Layout({ children }) {
             <Toaster />
         </div>
     )
+}
+
+Layout.propTypes = {
+  children: PropTypes.node,
 }

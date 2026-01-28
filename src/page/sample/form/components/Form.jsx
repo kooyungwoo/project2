@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import PropTypes from "prop-types"
 
 import { Button } from "@/components/ui/button"
 import { DynamicFormField } from "@/components/ui/DynamicFormField"
@@ -86,7 +87,7 @@ export default function DefaultForm({ searchResult }) {
   const onDelete = () => {
     const result = deleteSchema.safeParse({dataId: form.getValues().dataId})
     if (!result.success) {
-      console.error(result.error.format())
+      console.error(result.error?.errors)
       alert("데이터를 확인하세요")
       return
     }
@@ -151,4 +152,14 @@ export default function DefaultForm({ searchResult }) {
         </form>
     </Form>
   )
+}
+
+DefaultForm.propTypes = {
+  searchResult: PropTypes.shape({
+    dataId: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    status: PropTypes.string,
+    printable: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  }),
 }

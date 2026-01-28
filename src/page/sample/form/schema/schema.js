@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const searchSchema = z.object({
   dataId: z.preprocess(
-    (val) => Number(val), // 문자열 → 숫자 변환
+    Number, // 문자열 → 숫자 변환
     z.number({ required_error: "데이터 seq를 입력하세요" })
       .min(1, "데이터 seq를 확인하세요")
   ),
@@ -10,7 +10,7 @@ export const searchSchema = z.object({
 
 export const deleteSchema = z.object({
   dataId: z.preprocess(
-    (val) => Number(val), // 문자열 → 숫자 변환
+    Number, // 문자열 → 숫자 변환
     z.number({ required_error: "데이터 seq를 입력하세요" })
       .min(1, "데이터 seq를 확인하세요")
   ),

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -19,7 +20,7 @@ function Search({searchValues, setSearch}) {
     const handleSubmit = () => {
         const result = searchSchema.safeParse(pageSearchValues)
         if (!result.success) {
-        console.error(result.error.format())
+        console.error(result.error?.message)
         alert("검색 조건을 확인하세요")
         return
         }
@@ -52,6 +53,14 @@ function Search({searchValues, setSearch}) {
       <Button onClick={handleSubmit}>조회</Button>
     </div>
   )
+}
+
+Search.propTypes = {
+  searchValues: PropTypes.shape({
+    condition: PropTypes.string,
+    keyword: PropTypes.string,
+  }).isRequired,
+  setSearch: PropTypes.func.isRequired, // 함수
 }
 
 export default Search

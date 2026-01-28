@@ -1,6 +1,7 @@
 "use client"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import PropTypes from "prop-types"
 
 function Search({searchValues, setSearch, onSearch}) {
 
@@ -15,5 +16,14 @@ function Search({searchValues, setSearch, onSearch}) {
     </div>
   )
 }
+
+Search.propTypes = {
+  searchValues: PropTypes.shape({
+    dataId: PropTypes.string,   // dataId는 문자열
+  }).isRequired,
+  setSearch: PropTypes.func.isRequired, // 함수
+  onSearch: PropTypes.func.isRequired,  // 함수
+}
+
 
 export default Search

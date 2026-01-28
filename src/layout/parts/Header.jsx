@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import PropTypes from "prop-types"
+
 
 /* Header 컴포넌트, jsx 파일이고 1개만 export하기 때문에 default사용 */
 export default function Header({ sidebarOpen, setSidebarOpen }) {
@@ -8,10 +10,10 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
     // 다크 모드 토글
     const toggleDarkMode = () => {
         setDarkMode(!darkMode)
-        if (!darkMode) {
-        document.documentElement.classList.add("dark")
+        if (darkMode) {
+            document.documentElement.classList.remove("dark")
         } else {
-        document.documentElement.classList.remove("dark")
+            document.documentElement.classList.add("dark")        
         }
     }
     return (
@@ -34,4 +36,9 @@ export default function Header({ sidebarOpen, setSidebarOpen }) {
             </div>
         </header>      
     )
+}
+
+Header.propTypes = {
+  sidebarOpen: PropTypes.bool.isRequired,
+  setSidebarOpen: PropTypes.func.isRequired,
 }

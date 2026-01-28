@@ -13,7 +13,7 @@ export default function SampleForm() {
   const handleSearch = async () => {
     const result = searchSchema.safeParse(searchValues)
     if (!result.success) {
-      console.error(result.error.format())
+      console.error(result.error?.message)
       alert("검색 조건을 확인하세요")
       return
     }

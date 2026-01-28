@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useRef } from 'react';
 import GridPage from '@/components/GridPage'
 import { useCommonQuery } from "@/hooks/useCommonQuery"
@@ -27,5 +28,11 @@ function DefaultGrid({searchValues}) {
   if (ui) return ui
   return <GridPage ref={gridRef} rowData={rowData} columnDefs={columnDefs} gridOptions={gridOptions} />
 }
+
+DefaultGrid.propTypes = {
+  searchValues: PropTypes.shape({
+    keyword: PropTypes.string,
+  }).isRequired,
+};
 
 export default DefaultGrid

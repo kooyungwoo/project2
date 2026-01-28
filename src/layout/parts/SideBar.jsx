@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import PropTypes from "prop-types"
 
 /* Sidebar 컴포넌트, jsx 파일이고 1개만 export하기 때문에 default사용 */
 export default function Sidebar({ sidebarOpen }) {
@@ -16,4 +17,8 @@ export default function Sidebar({ sidebarOpen }) {
           </nav>
         </aside> 
     )
+}
+
+Sidebar.propTypes = {
+  sidebarOpen: PropTypes.bool.isRequired,
 }

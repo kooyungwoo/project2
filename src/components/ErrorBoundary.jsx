@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 
@@ -20,8 +21,8 @@ export default function ErrorBoundary({ error }) {
         {/* Validation 에러가 있다면 리스트로 출력 */}
         {validationErrors && validationErrors.length > 0 && (
           <ul className="mt-2 text-xs list-disc list-inside opacity-80">
-            {validationErrors.map((err, idx) => (
-              <li key={idx}>
+            {validationErrors.map((err) => (
+              <li key={err.field}>
                 <span className="font-semibold">{err.field}</span>: {err.message}
               </li>
             ))}
@@ -30,4 +31,22 @@ export default function ErrorBoundary({ error }) {
       </AlertDescription>
     </Alert>
   )
+}
+
+ErrorBoundary.propTypes = {
+  error: PropTypes.shape({
+    message: PropTypes.string,
+    response: PropTypes.shape({
+      data: PropTypes.shape({
+        code: PropTypes.string,
+        message: PropTypes.string,
+        errors: PropTypes.arrayOf(
+          PropTypes.shape({
+            field: PropTypes.string,
+            message: PropTypes.string,
+          })
+        ),
+      }),
+    }),
+  }),
 }
