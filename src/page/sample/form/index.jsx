@@ -8,13 +8,13 @@ import { searchSchema } from "./schema/schema"
 import { selectSampleForm } from './services/service'
 
 export default function SampleForm() {
-  const [searchValues, setSearch] = useState({dataId: ""})
+  const [searchValues, setSearchValues] = useState({dataId: ''})
   const [searchResult, setSearchResult] = useState(null)
 
   const handleSearch = async () => {
     const result = searchSchema.safeParse(searchValues)
     if (!result.success) {
-      console.error(result.error.format())
+      console.error(result.error?.message)
       alert("검색 조건을 확인하세요")
       return
     }
@@ -22,10 +22,14 @@ export default function SampleForm() {
     setSearchResult(resultData)
   }
 
+  const handleSearchValueChange = (newValue) => {
+    setSearchValues(newValue);
+  };
+
   return (
     <div className="space-y-6">
       <Card className="p-4">
-        <Search searchValues={searchValues} setSearch={setSearch} onSearch={handleSearch} />
+        <Search searchValues={searchValues} setSearchValues={handleSearchValueChange} onSearch={handleSearch} />
       </Card>
       <Card className="p-4">
         <DefaultForm searchResult={searchResult} />
