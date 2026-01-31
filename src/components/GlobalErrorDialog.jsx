@@ -4,24 +4,41 @@ import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogFooter,
+  AlertDialogAction,
 } from "@/components/ui/alert-dialog"
+import { XCircle } from "lucide-react" // 에러 아이콘
 
 export function GlobalErrorDialog() {
   const [errorMessage, setErrorMessage] = useAtom(errorMessageAtom)
 
-  /** 
-   * !!errorMessage !! -> 값 존재 여부를 boolean으로 변환(있으면 true, 없으면 false)
-   * errorMessage || x -> OR 연산자. 앞 값이 falsy('', 0, null, undefined)면 뒤 값(x)을 반환
-   * errorMessage ?? x -> Nullish Coalescing 연산자. null이나 undefined일 때만 뒤 값(x)을 반환
-    */
   return (
     <AlertDialog open={!!errorMessage} onOpenChange={() => setErrorMessage(null)}>
-      <AlertDialogContent>
-        <AlertDialogHeader>에러 발생</AlertDialogHeader>
-        <p>{errorMessage}</p>
-        <AlertDialogFooter>
-          <button onClick={() => setErrorMessage(null)}>확인</button>
+      <AlertDialogContent className="max-w-[400px] border-red-100">
+        <AlertDialogHeader className="flex flex-col items-center justify-center gap-4 py-4">
+          {/* 상단 에러 아이콘 섹션 */}
+          <div className="rounded-full bg-red-50 p-3">
+            <XCircle className="h-10 w-10 text-red-500" />
+          </div>
+          
+          <AlertDialogTitle className="text-xl font-semibold text-red-600">
+            에러 발생
+          </AlertDialogTitle>
+          
+          <div className="text-center text-sm text-slate-600 leading-relaxed px-2">
+            {/* 줄바꿈 처리를 위한 white-space-pre-wrap 권장 */}
+            <p className="whitespace-pre-wrap">{errorMessage}</p>
+          </div>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="sm:justify-center">
+          <AlertDialogAction 
+            onClick={() => setErrorMessage(null)}
+            className="bg-red-500 hover:bg-red-600 text-white w-full sm:w-24"
+          >
+            확인
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

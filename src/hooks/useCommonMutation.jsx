@@ -1,6 +1,4 @@
 import { useMutation } from '@tanstack/react-query'
-import Loading from '@/components/Loading'
-import ErrorBoundary from '@/components/ErrorBoundary'
 
 /* 공통 뮤테이션(put, post, delete method용) 훅(react-query 사용) */
 export function useCommonMutation(mutationFn, options = {}) {
@@ -15,8 +13,5 @@ export function useCommonMutation(mutationFn, options = {}) {
     ...mergedOptions,
   })
 
-  if (isLoading) return { ui: <Loading /> }
-  if (error) return { ui: <ErrorBoundary /> }
-
-  return { ui: null, mutate, data }
+  return { isLoading, mutate, data, error }
 }

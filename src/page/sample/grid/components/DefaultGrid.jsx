@@ -7,7 +7,7 @@ import { apiClient } from "@/lib/apiClient"
 function DefaultGrid({searchValues}) {
   const gridRef = useRef(null)
 
-  const { ui, data: rowData } = useCommonQuery(
+  const { data: rowData } = useCommonQuery(
     ['sample-grid-search', JSON.stringify(searchValues)],
     () => apiClient.get('/sample-grid', { params: searchValues }).then(res => res.data),
     { enabled: !!searchValues.keyword } // 검색어가 있을 때만 실행(최초 로드 시 불필요한 호출 방지)
@@ -25,7 +25,6 @@ function DefaultGrid({searchValues}) {
     defaultColDef: { flex: 1 },
   }
 
-  if (ui) return ui
   return <GridPage ref={gridRef} rowData={rowData} columnDefs={columnDefs} gridOptions={gridOptions} />
 }
 

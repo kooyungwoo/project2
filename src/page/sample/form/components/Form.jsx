@@ -14,13 +14,18 @@ import { useToast } from "@/hooks/use-toast"
 import { useCommonMutation } from "@/hooks/useCommonMutation"
 import { saveSampleForm, deleteSampleForm } from '../services/service'
 
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { commonCodeAtom } from '@/atoms/commonCodeAtom'
-
+import { alertMessageAtom } from '@/atoms/alertAtom'
+import { useConfirm } from '@/hooks/useConfirm'
 
 export default function DefaultForm({ searchResult }) {
   /* 공통코드 조회결과 구독 */
   const commonCodes = useAtomValue(commonCodeAtom)
+  /* alert 출력 메시지 설정 */
+  const setAlertMessage = useSetAtom(alertMessageAtom)
+  /* confirm 훅 사용 */
+  const confirm = useConfirm();
   /* 폼의 초기값 정의(reset에도 활용) */
   const initialValues = {
     dataId: "",
@@ -52,7 +57,7 @@ export default function DefaultForm({ searchResult }) {
   }, [searchResult, reset])
 
   /* 폼 저장 처리, saveMutate을 사용하여 폼 데이터 저장(정의된 saveSampleForm 사용) */
-  const { ui: saveUi, mutate: saveMutate } = useCommonMutation(
+  const { mutate: saveMutate } = useCommonMutation(
     saveSampleForm,
     { retry: 0,
       onSuccess: (res) => {
@@ -71,7 +76,7 @@ export default function DefaultForm({ searchResult }) {
   } 
 
   /* 삭제 처리, deleteMutate을 사용하여 데이터 삭제(정의된 deleteSampleForm 사용) */
-  const { ui: deleteUi, mutate: deleteMutate } = useCommonMutation(
+  const { mutate: deleteMutate } = useCommonMutation(
     deleteSampleForm,
     { retry: 0,
       onSuccess: (res) => {
@@ -84,18 +89,28 @@ export default function DefaultForm({ searchResult }) {
     }
   )
   /* 삭제 핸들러 deleteMutate 호출 */
-  const onDelete = () => {
-    const result = deleteSchema.safeParse({dataId: form.getValues().dataId})
-    if (!result.success) {
-      console.error(result.error?.errors)
-      alert("데이터를 확인하세요")
+  const onDelete = async () => {
+    if(!form.getValues().dataId) {
+      toast({
+        title: "삭제 불가", description: "삭제할 데이터를 먼저 조회하세요."
+      })
       return
     }
-    deleteMutate(form.getValues().dataId)
+    const confirmed = await confirm({
+      title: "삭제 확인",
+      message: "정말 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.",
+      variant: "destructive"
+    })
+    if (confirmed) {
+      const result = deleteSchema.safeParse({dataId: form.getValues().dataId})
+      if (!result.success) {
+        console.error(result.error?.errors)
+        setAlertMessage("데이터를 확인하세요")
+        return
+      }
+      deleteMutate(form.getValues().dataId)
+    }    
   }
-
-  if (saveUi) return saveUi
-  if (deleteUi) return deleteUi
 
   return (
     <Form {...form}>

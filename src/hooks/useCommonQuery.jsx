@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import Loading from '@/components/Loading'
-import ErrorBoundary from '@/components/ErrorBoundary'
 
 /* 공통 쿼리 훅(react-query 사용) */
 export function useCommonQuery(queryKey, queryFn, options = {}) {
@@ -22,15 +20,5 @@ export function useCommonQuery(queryKey, queryFn, options = {}) {
     ...mergedOptions,
   })
 
-  /* 로딩 및 에러 처리(로딩 및 에러 UI 반환) */
-  if (isLoading) return { ui: <Loading /> }
-  if (error) {
-    return { 
-      ui: <ErrorBoundary error={error} />, // error 객체 주입
-      data: null
-    };
-  }
-
-  /* 쿼리 결과 반환(ui: 정상이라 아무것도 없음, data: 쿼리 결과, refetch: 재조회 함수) */
-  return { ui: null, data, refetch }
+  return { isLoading, data, refetch, error }
 }

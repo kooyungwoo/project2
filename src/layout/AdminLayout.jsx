@@ -19,7 +19,7 @@ export default function Layout({ children }) {
     // 공통코드 조회 (커스텀 훅 사용)
     const { data } = useCommonQuery(
         ["common-code"],
-        () => apiClient.get("/common/common-codes").then(res => res.data),
+        () => apiClient.get("/common/common-codes", {globalLoading: false}).then(res => res.data),
         {
         staleTime: 1000 * 60 * 10, // 10분 동안 fresh
         }

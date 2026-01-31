@@ -62,7 +62,7 @@ export default function FileForm() {
 
 
   /* 폼 저장 처리, saveMutate을 사용하여 폼 데이터 저장(정의된 saveSampleFile 사용) */
-  const { ui: saveUi, mutate: saveMutate } = useCommonMutation(
+  const { mutate: saveMutate } = useCommonMutation(
     saveSampleFile,
     { retry: 0,
       onSuccess: (res) => {
@@ -87,9 +87,6 @@ export default function FileForm() {
     };
     saveMutate(payload)
   } 
-
-  if (saveUi) return saveUi
-  
 
   return (
     <Form {...form}>
