@@ -3,7 +3,6 @@ import { Outlet } from '@tanstack/react-router'
 import Header from "@/layout/parts/Header"
 import Sidebar from "@/layout/parts/SideBar"
 import Footer from "@/layout/parts/Footer"
-import { Toaster } from "@/components/ui/toaster"
 import { useSetAtom } from "jotai"
 import { commonCodeAtom } from "@/atoms/commonCodeAtom"
 import { useCommonQuery } from "@/hooks/useCommonQuery"
@@ -41,8 +40,7 @@ export default function Layout({ children }) {
                 {children ?? <Outlet />}
                 </main>
             </div>
-            <Footer />
-            <Toaster />
+            <Footer />            
         </div>
     )
 }

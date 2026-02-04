@@ -1,38 +1,47 @@
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import PropTypes from "prop-types"
+import { useTheme } from "@/hooks/use-theme"
+import { Moon, Sun } from "lucide-react"
 
-
-/* Header 컴포넌트, jsx 파일이고 1개만 export하기 때문에 default사용 */
 export default function Header({ sidebarOpen, setSidebarOpen }) {
-    const [darkMode, setDarkMode] = useState(false);
+    const { theme, setTheme } = useTheme();
 
-    // 다크 모드 토글
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode)
-        if (darkMode) {
-            document.documentElement.classList.remove("dark")
-        } else {
-            document.documentElement.classList.add("dark")        
-        }
+        setTheme(theme === "dark" ? "light" : "dark");
     }
+
     return (
         <header className="h-14 bg-gray-800 dark:bg-gray-950 text-white flex items-center px-4">
             {/* 모바일 햄버거 버튼 */}
             <Button
-            variant="outline"
-            size="sm"
-            className="md:hidden mr-2"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+                variant="outline"
+                size="sm"
+                className="md:hidden mr-2 text-black dark:text-white"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-            ☰
+                ☰
             </Button>
+            
             <div className="font-bold text-lg">관리자 대시보드</div>
+            
             <div className="ml-auto flex gap-2">
-            <Button variant="outline" size="sm" onClick={toggleDarkMode} className="bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100">
-                {darkMode ? "라이트 모드" : "다크 모드"}
-            </Button>
-            <Button variant="outline" size="sm" className="bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100">로그아웃</Button>
+                {/* 테마 토글 버튼 */}
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={toggleDarkMode} 
+                    className="bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+                >
+                    {theme === "dark" ? (
+                        <><Sun className="mr-2 h-4 w-4" /> 라이트 모드</>
+                    ) : (
+                        <><Moon className="mr-2 h-4 w-4" /> 다크 모드</>
+                    )}
+                </Button>
+                
+                <Button variant="outline" size="sm" className="bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                    로그아웃
+                </Button>
             </div>
         </header>      
     )

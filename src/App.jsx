@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GlobalOverlay } from "@/components/GlobalOverlay"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { Toaster } from "@/components/ui/toaster"
+import { ThemeProvider } from "@/provider/theme-provider"
 
 const queryClient = new QueryClient()
 
@@ -13,19 +15,23 @@ const router = createRouter({ routeTree })
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>      
-      <RouterProvider router={router} />
-      {/* 공통 레이어 (로딩, 에러, 알림, 컨펌) */}
-      <GlobalOverlay />
+    <ThemeProvider defaultTheme="light" storageKey="app-theme">
+      <QueryClientProvider client={queryClient}>      
+        <RouterProvider router={router} />
+        {/* 공통 레이어 (로딩, 에러, 알림, 컨펌) */}
+        <GlobalOverlay />
+        {/* 토스트 알림 */}
+        <Toaster />
 
-      {/* 개발 도구(npm run dev 상태에서만 보임) */}
-      {import.meta.env.DEV && (
-        <>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <TanStackRouterDevtools router={router} />
-        </>
-      )}
-    </QueryClientProvider>
+        {/* 개발 도구(npm run dev 상태에서만 보임) */}
+        {import.meta.env.DEV && (
+          <>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <TanStackRouterDevtools router={router} />
+          </>
+        )}      
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }
 
