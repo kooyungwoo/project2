@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-function IndexPage() {
+function PopupPage() {
   return (
     <Dialog>
       {/* asChild 사용: 내가 넣은 Button을 그대로 트리거로 사용 */}
@@ -38,4 +38,4 @@ function IndexPage() {
   )
 }
 
-export default IndexPage
+export default PopupPage

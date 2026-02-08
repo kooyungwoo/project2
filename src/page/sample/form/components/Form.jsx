@@ -14,14 +14,14 @@ import { useToast } from "@/hooks/use-toast"
 import { useCommonMutation } from "@/hooks/useCommonMutation"
 import { saveSampleForm, deleteSampleForm } from '../services/service'
 
-import { useAtomValue, useSetAtom } from 'jotai'
-import { commonCodeAtom } from '@/atoms/commonCodeAtom'
+import { useSetAtom } from 'jotai'
+import { useCommonCode } from '@/hooks/useCommonCode'
 import { alertMessageAtom } from '@/atoms/alertAtom'
 import { useConfirm } from '@/hooks/useConfirm'
 
 export default function DefaultForm({ searchResult }) {
   /* 공통코드 조회결과 구독 */
-  const commonCodes = useAtomValue(commonCodeAtom)
+  const formGubunOptions = useCommonCode('FORM_GUBUN')
   /* alert 출력 메시지 설정 */
   const setAlertMessage = useSetAtom(alertMessageAtom)
   /* confirm 훅 사용 */
@@ -146,8 +146,7 @@ export default function DefaultForm({ searchResult }) {
             name="status"
             label="상태"
             placeholder="상태 선택"
-            options={commonCodes
-                    .filter(code => code.commonGroupCd === "FORM_GUBUN")
+            options={formGubunOptions
                     .map(code => ({ value: code.commonValue, label: code.commonName }))}
         />
 

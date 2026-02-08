@@ -6,7 +6,7 @@ import Search from "../form/components/Search"
 import { searchSchema } from "../form/schema/schema"
 import { selectSampleForm } from './services/service'
 
-export default function SampleForm() {
+export default function ErrorPage() {
   const [searchValues, setSearch] = useState({dataId: ""})
   const [searchResult, setSearchResult] = useState(null)
 

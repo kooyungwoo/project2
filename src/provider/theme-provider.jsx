@@ -13,7 +13,7 @@ export function ThemeProvider({
   )
 
   useEffect(() => {
-    // 1. window 대신 globalThis 사용 권장 대응
+    // window 대신 globalThis 사용 권장
     const root = globalThis.document.documentElement
     root.classList.remove("light", "dark")
 

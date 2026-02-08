@@ -10,12 +10,11 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 import { searchSchema } from "../schema/schema"
-import { useAtomValue } from 'jotai'
-import { commonCodeAtom } from '@/atoms/commonCodeAtom'
+import { useCommonCode } from '@/hooks/useCommonCode'
 
 function Search({searchValues, setSearch}) {
-    const [pageSearchValues, setPageSerch] = useState(searchValues)
-    const commonCodes = useAtomValue(commonCodeAtom)
+    const [pageSearchValues, setPageSearchValues] = useState(searchValues)
+    const searchTypeOptions = useCommonCode('SEARCH_TYPE')
 
     const handleSubmit = () => {
         const result = searchSchema.safeParse(pageSearchValues)
@@ -30,13 +29,12 @@ function Search({searchValues, setSearch}) {
   return (
     <div className="flex gap-4 items-end mb-4">
       {/* 검색조건 SelectBox */}
-      <Select value={pageSearchValues.condition} onValueChange={(val) => setPageSerch({ ...pageSearchValues, condition: val })}>
+      <Select value={pageSearchValues.condition} onValueChange={(val) => setPageSearchValues({ ...pageSearchValues, condition: val })}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="검색조건" />
         </SelectTrigger>
         <SelectContent>
-          {commonCodes
-          .filter(code => code.commonGroupCd === "SEARCH_TYPE")
+          {searchTypeOptions
           .map(code => (
             <SelectItem key={code.commonValue} value={code.commonValue}>
               {code.commonName}
@@ -47,7 +45,7 @@ function Search({searchValues, setSearch}) {
 
       {/* 검색어 Input */}
       <Input value={pageSearchValues.keyword}
-        onChange={e => setPageSerch({ ...pageSearchValues, keyword: e.target.value })} placeholder="검색어 입력" className="w-[240px]" />
+        onChange={e => setPageSearchValues({ ...pageSearchValues, keyword: e.target.value })} placeholder="검색어 입력" className="w-[240px]" />
 
       {/* 조회 버튼 */}
       <Button onClick={handleSubmit}>조회</Button>
