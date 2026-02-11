@@ -17,7 +17,7 @@ export const canOpenNextTab = (nextPath) => {
   if (isAlreadyOpen) return true;
 
   // 새로운 탭인데 10개가 넘었다면 차단
-  if (currentTabs.length >= 3) {
+  if (currentTabs.length >= 10) {
     store.set(alertMessageAtom, "최대 10개까지만 탭을 열 수 있습니다.");
     return false;
   }

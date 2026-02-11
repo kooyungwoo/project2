@@ -24,10 +24,13 @@ export const responseSchema = z.object({
   printable: z.string(),
 })
 
-export const formSchema = z.object({
-  dataId: z.number().nullable().optional(),
+export const formSchema = z.object({  
   title: z.string().min(1, "제목은 필수입니다"),
   content: z.string().min(1, "내용은 필수입니다"),
   status: z.string(),
   printable: z.boolean(),
+  dataId: z.preprocess(
+    (val) => val === "" ? null : val,
+    z.number().nullable().optional()
+  ),
 })

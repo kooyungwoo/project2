@@ -39,6 +39,7 @@ export default function DefaultForm({ searchResult }) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
+    shouldFocusError: true, // 유효성 검사 실패 시 해당 필드로 포커스 이동
   })
   const { reset } = form
   const { toast } = useToast()
@@ -114,13 +115,13 @@ export default function DefaultForm({ searchResult }) {
 
   return (
     <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md">   
         {/* dataId */}
         <DynamicFormField
             control={form.control} /* form control 연결, name기준의 값 연결 및 상태 관리(form에 입력값 자동 맵핑 onchange) */
             type="hidden"
             name="dataId"
-        />
+        />     
         {/* 제목 */}
         <DynamicFormField
             control={form.control}
@@ -156,7 +157,7 @@ export default function DefaultForm({ searchResult }) {
             type="checkbox"
             name="printable"
             label="출력 여부"
-        />
+        />       
 
         {/* 제출 버튼 */}
         <div className="flex gap-2">

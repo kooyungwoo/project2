@@ -9,6 +9,10 @@ export const tabActionsAtom = atom(
 
     /*
     action.type 종류: 현재 설정된 것 외에 아래 기능들도 추가 가능
+    해당 기능들은 정해진 규약이 아닌 자유롭게 확장 가능한 액션 타입
+    ADD_TAB: 새로운 탭 추가
+    REORDER_TABS: 탭 순서 변경 (드래그 앤 드롭 등)
+    CLOSE_TAB: 특정 탭 닫기
     CLOSE_OTHERS: 현재 활성화된 탭을 제외한 모든 탭을 닫음 (작업 중인 화면만 남기고 정리하고 싶을 때)
     CLOSE_ALL: 모든 탭을 닫고 메인(홈)으로 이동 (업무를 완전히 새로 시작하거나 퇴근할 때)
     CLOSE_RIGHT: 현재 선택된 탭의 오른쪽에 있는 탭들만 닫음 (브라우저 탭 관리와 유사한 UX 제공)

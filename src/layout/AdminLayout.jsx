@@ -53,10 +53,14 @@ export default function Layout() {
         }
     };
 
+    // 경로가 바뀔 때마다 openTabsAtom 상태를 확인하고, 없으면 추가
     useEffect(() => {
+        // 현재 경로가 openTabs에 없으면 추가
         const isExist = openTabs.some(tab => tab.path === location.pathname);
 
+        // 탭이 존재하지 않으면 추가 액션 디스패치
         if (!isExist) {
+            // 현재 경로에 매칭되는 라우트 정보를 찾아서 제목을 가져옴
             const matches = router.matchRoutes(location.pathname);
             const lastMatch = matches?.at(-1);
             
@@ -66,11 +70,11 @@ export default function Layout() {
                         || '메인';
 
             dispatch({ 
-                type: 'ADD_TAB', 
+                type: 'ADD_TAB', // 탭 추가 액션
                 payload: { 
                     title: title,
-                    path: location.pathname, 
-                    id: location.pathname 
+                    path: location.pathname, // 고유 식별자
+                    id: location.pathname // KeepAlive용 id도 동일하게 설정
                 } 
             });
         }

@@ -37,6 +37,7 @@ function App() {
 
   return (
     <div onClickCapture={handleGlobalClickCapture}>
+      {/* 테마 프로바이더 설정 (기본 라이트 모드, 저장 키 'app-theme') */}
       <ThemeProvider defaultTheme="light" storageKey="app-theme">
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
