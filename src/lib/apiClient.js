@@ -23,6 +23,7 @@ apiClient.interceptors.request.use(config => {
 
 apiClient.interceptors.response.use(
   res => {
+    // 글로벌 로딩 카운트 처리(응답이든 에러든 무조건 감소)
     if (res.config.globalLoading) {
       store.set(loadingCountAtom, prev => Math.max(0, prev - 1));
     }
@@ -30,7 +31,7 @@ apiClient.interceptors.response.use(
   },
   err => {
     const config = err.config
-
+    // 글로벌 로딩 카운트 처리(응답이든 에러든 무조건 감소)
     if (config?.globalLoading) {
       store.set(loadingCountAtom, prev => Math.max(0, prev - 1));
     }
@@ -40,6 +41,7 @@ apiClient.interceptors.response.use(
     if (handleError) {
       // alert(err.response?.data?.message || "알 수 없는 에러가 발생했습니다.")
       const message = err.response?.data?.message || "알 수 없는 에러가 발생했습니다."
+      // 에러 처리는 errorMessageAtom을 통해 전역으로 관리
       store.set(errorMessageAtom, message)
     }
 

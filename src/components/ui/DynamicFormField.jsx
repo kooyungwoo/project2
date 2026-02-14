@@ -15,7 +15,21 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import PropTypes from "prop-types"
 
+/**
+ * 동적 폼 필드 컴포넌트
+ * @param {Object} props - 컴포넌트 props
+ * @param {Object} props.control - React Hook Form control 객체
+ * @param {string} props.type - 입력 필드 타입 (input, hidden, file, textarea, select, checkbox)
+ * @param {string} props.name - 필드 이름
+ * @param {string} [props.label] - 필드 라벨
+ * @param {string} [props.placeholder] - 필드 플레이스홀더
+ * @param {Array<{value: string, label: string}>} [props.options] - select 옵션 배열
+ * @param {Object} [props.props] - 추가 props (file 타입용)
+ * @param {Function} [props.onChange] - 커스텀 onChange 콜백
+ * @returns {JSX.Element} 폼 필드 컴포넌트
+ */
 export function DynamicFormField({ control, type, name, label, placeholder, options, props, onChange }) {
   const renderControl = (field) => {
     let component;
@@ -79,4 +93,18 @@ export function DynamicFormField({ control, type, name, label, placeholder, opti
       )}
     />
   )
+}
+
+DynamicFormField.propTypes = {
+  control: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  })),
+  props: PropTypes.object,
+  onChange: PropTypes.func,
 }

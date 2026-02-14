@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community'
-import { themeAlpine } from 'ag-grid-community' // 테마 임포트
+import { ModuleRegistry, AllCommunityModule, themeAlpine } from 'ag-grid-community'
 
 // 모듈 등록 (컴포넌트가 처음 로드될 때 실행)
 ModuleRegistry.registerModules([AllCommunityModule])
