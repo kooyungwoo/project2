@@ -8,6 +8,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/provider/theme-provider"
 import { canOpenNextTab } from '@/policies/tabPolicy'
+import { AliveScope } from 'react-activation'
 
 const queryClient = new QueryClient()
 
@@ -40,19 +41,22 @@ function App() {
       {/* 테마 프로바이더 설정 (기본 라이트 모드, 저장 키 'app-theme') */}
       <ThemeProvider defaultTheme="light" storageKey="app-theme">
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          {/* 공통 레이어 (로딩, 에러, 알림, 컨펌) */}
-          <GlobalOverlay />
-          {/* 토스트 알림 */}
-          <Toaster />
+          {/* AliveScope는 활성화된 컴포넌트를 유지하는 컨텍스트입니다. 라우터와 함께 사용하여 탭 간(KeepAlive) 상태 유지에 도움을 줍니다. */}
+          <AliveScope>
+            <RouterProvider router={router} />
+            {/* 공통 레이어 (로딩, 에러, 알림, 컨펌) */}
+            <GlobalOverlay />
+            {/* 토스트 알림 */}
+            <Toaster />
 
-          {/* 개발 도구(npm run dev 상태에서만 보임) */}
-          {import.meta.env.DEV && (
+            {/* 개발 도구(npm run dev 상태에서만 보임) */}
+            {import.meta.env.DEV && (
             <>
               <ReactQueryDevtools initialIsOpen={false} />
               <TanStackRouterDevtools router={router} />
             </>
           )}      
+          </AliveScope>
         </QueryClientProvider>
       </ThemeProvider>
     </div>

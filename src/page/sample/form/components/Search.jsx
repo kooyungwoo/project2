@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import PropTypes from "prop-types"
 
-function Search({searchValues, setSearchValues, onSearch}) {
+function Search({searchValues, setSearchValues, onSearch, onPrint}) {
 
   return (
     <div className="flex gap-4 items-end mb-4">
@@ -13,6 +13,8 @@ function Search({searchValues, setSearchValues, onSearch}) {
 
       {/* 조회 버튼 */}
       <Button onClick={onSearch}>조회</Button>
+      {/* 인쇄 버튼 */}
+      <Button onClick={onPrint} className="print:hidden">인쇄</Button>
     </div>
   )
 }
@@ -23,6 +25,7 @@ Search.propTypes = {
   }).isRequired,
   setSearchValues: PropTypes.func.isRequired, // 함수
   onSearch: PropTypes.func.isRequired,  // 함수
+  onPrint: PropTypes.func.isRequired,  // 함수
 }
 
 
