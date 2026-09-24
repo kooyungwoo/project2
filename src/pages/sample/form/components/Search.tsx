@@ -1,9 +1,19 @@
-"use client"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import PropTypes from "prop-types"
+'use client'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
-function Search({searchValues, setSearchValues, onSearch, onPrint}) {
+export interface FormSearchValues {
+  dataId: string
+}
+
+export interface SearchProps {
+  searchValues: FormSearchValues
+  setSearchValues: (values: FormSearchValues) => void
+  onSearch: () => void
+  onPrint?: () => void
+}
+
+function Search({ searchValues, setSearchValues, onSearch, onPrint }: Readonly<SearchProps>) {
 
   return (
     <div className="flex gap-4 items-end mb-4">
@@ -18,15 +28,5 @@ function Search({searchValues, setSearchValues, onSearch, onPrint}) {
     </div>
   )
 }
-
-Search.propTypes = {
-  searchValues: PropTypes.shape({
-    dataId: PropTypes.string,   // dataId는 문자열
-  }).isRequired,
-  setSearchValues: PropTypes.func.isRequired, // 함수
-  onSearch: PropTypes.func.isRequired,  // 함수
-  onPrint: PropTypes.func.isRequired,  // 함수
-}
-
 
 export default Search

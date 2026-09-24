@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
-import Search from "./components/Search"
-import DefaultGrid from "./components/DefaultGrid"
-import { Card } from "@/components/ui/card"
-import { usePersistedState } from "@/hooks/usePersistedState"
+import Search from './components/Search'
+import DefaultGrid from './components/DefaultGrid'
+import { Card } from '@/components/ui/card'
+import { usePersistedState } from '@/hooks/usePersistedState'
+import type { GridSearchValues } from './schema/schema'
 
 function IndexPage() {
-  const [searchValues, setSearch, saveSearch] = usePersistedState("sample-grid-search", {
-      condition: "name",
-      keyword: "",
+  const [searchValues, setSearch, saveSearch] = usePersistedState<GridSearchValues>('sample-grid-search', {
+    condition: 'name',
+    keyword: '',
   })
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function IndexPage() {
 
       {/* 그리드 영역 */}
       <Card className="p-4">
-        <DefaultGrid searchValues={searchValues}/>
+        <DefaultGrid searchValues={searchValues} />
       </Card>
     </div>
   )

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { Card } from "@/components/ui/card"
-import FileForm from "./components/Form"
+import { Card } from '@/components/ui/card'
+import FileForm from './components/Form'
 
 export default function SampleForm() {
 

@@ -1,6 +1,6 @@
-import { errorMessageAtom } from "@/atoms/errorAtom"
-import { loadingCountAtom } from "@/atoms/loadingAtom"
-import { getDefaultStore } from "jotai"
+import { errorMessageAtom } from '@/atoms/errorAtom'
+import { loadingCountAtom } from '@/atoms/loadingAtom'
+import { getDefaultStore } from 'jotai'
 import axios from 'axios'
 
 const store = getDefaultStore()
@@ -14,9 +14,9 @@ apiClient.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   if (token) config.headers.Authorization = `Bearer ${token}`
   // 글로벌 로딩 처리 옵션이 true인 경우(기본값 없으면 명식적 true설정)
-  config.globalLoading = config.globalLoading ?? true;
+  config.globalLoading = config.globalLoading ?? true
   if (config.globalLoading) {
-    store.set(loadingCountAtom, prev => prev + 1);
+    store.set(loadingCountAtom, prev => prev + 1)
   }
   return config
 })
@@ -25,22 +25,21 @@ apiClient.interceptors.response.use(
   res => {
     // 글로벌 로딩 카운트 처리(응답이든 에러든 무조건 감소)
     if (res.config.globalLoading) {
-      store.set(loadingCountAtom, prev => Math.max(0, prev - 1));
+      store.set(loadingCountAtom, prev => Math.max(0, prev - 1))
     }
-    return res;
+    return res
   },
   err => {
     const config = err.config
     // 글로벌 로딩 카운트 처리(응답이든 에러든 무조건 감소)
     if (config?.globalLoading) {
-      store.set(loadingCountAtom, prev => Math.max(0, prev - 1));
+      store.set(loadingCountAtom, prev => Math.max(0, prev - 1))
     }
 
     // 글로벌 에러 처리 옵션이 true인 경우(기본은 true)
-    const handleError = config?.handleErrorGlobally ?? true;    
+    const handleError = config?.handleErrorGlobally ?? true
     if (handleError) {
-      // alert(err.response?.data?.message || "알 수 없는 에러가 발생했습니다.")
-      const message = err.response?.data?.message || "알 수 없는 에러가 발생했습니다."
+      const message = err.response?.data?.message || '알 수 없는 에러가 발생했습니다.'
       // 에러 처리는 errorMessageAtom을 통해 전역으로 관리
       store.set(errorMessageAtom, message)
     }

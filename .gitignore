@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# SonarQube lint reports
+eslint-report.json
+stylelint-report.json
+.scannerwork/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,18 +9,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import PropTypes from "prop-types"
+} from '@/components/ui/alert-dialog'
 
-export function ConfirmDialog({ 
-  children, 
-  title = "확인", 
-  description = "정말 이 작업을 진행하시겠습니까?", 
+export interface ConfirmDialogProps {
+  children: ReactNode
+  title?: string
+  description?: string
+  onConfirm: () => void
+  confirmText?: string
+  cancelText?: string
+  variant?: string // 'default' | 'destructive'
+}
+
+export function ConfirmDialog({
+  children,
+  title = '확인',
+  description = '정말 이 작업을 진행하시겠습니까?',
   onConfirm,
-  confirmText = "확인",
-  cancelText = "취소",
-  variant = "default" // 'default' | 'destructive'
-}) {
+  confirmText = '확인',
+  cancelText = '취소',
+  variant = 'default', // 'default' | 'destructive'
+}: Readonly<ConfirmDialogProps>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -36,9 +46,9 @@ export function ConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction 
+          <AlertDialogAction
             onClick={onConfirm}
-            className={variant === "destructive" ? "bg-red-600 hover:bg-red-700" : ""}
+            className={variant === 'destructive' ? 'bg-red-600 hover:bg-red-700' : ''}
           >
             {confirmText}
           </AlertDialogAction>
@@ -46,14 +56,4 @@ export function ConfirmDialog({
       </AlertDialogContent>
     </AlertDialog>
   )
-}
-
-ConfirmDialog.propTypes = {
-  children: PropTypes.node.isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  onConfirm: PropTypes.func.isRequired,
-  confirmText: PropTypes.string,
-  cancelText: PropTypes.string,
-  variant: PropTypes.string,
 }

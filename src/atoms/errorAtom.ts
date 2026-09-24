@@ -1,3 +1,3 @@
-import { atom } from "jotai"
+import { atom } from 'jotai'
 
-export const errorMessageAtom = atom(null)
+export const errorMessageAtom = atom<string | null>(null)

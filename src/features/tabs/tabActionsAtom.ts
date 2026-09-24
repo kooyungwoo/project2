@@ -1,11 +1,16 @@
 import { atom } from 'jotai'
-import { openTabsAtom } from './tabAtom'
+import { openTabsAtom, type TabItem } from './tabAtom'
+
+export type TabAction =
+  | { type: 'ADD_TAB'; payload: TabItem }
+  | { type: 'REORDER_TABS'; payload: TabItem[] }
+  | { type: 'CLOSE_TAB'; payload: string }
 
 export const tabActionsAtom = atom(
   null,
-  (get, set, action) => {
+  (get, set, action: TabAction) => {
     // useSetAtom을 지우고, 아래 switch문 안에서 직접 set을 사용합니다.
-    const currentTabs = get(openTabsAtom);
+    const currentTabs = get(openTabsAtom)
 
     /*
     action.type 종류: 현재 설정된 것 외에 아래 기능들도 추가 가능
@@ -22,24 +27,24 @@ export const tabActionsAtom = atom(
     switch (action.type) {
       case 'ADD_TAB': { // 탭추가
         // 탭 개수에 대한 처리는 app 레벨에서 이미 처리되었으므로 여기서는 단순 추가만 수행
-        const newTab = action.payload;
+        const newTab = action.payload
         // 중복된 탭이 있으면 추가하지 않음
-        if (currentTabs.some(tab => tab.path === newTab.path)) return;        
-        
-        set(openTabsAtom, [...currentTabs, newTab]);
-        break;
+        if (currentTabs.some(tab => tab.path === newTab.path)) return
+
+        set(openTabsAtom, [...currentTabs, newTab])
+        break
       }
       case 'REORDER_TABS': { // 탭순서변경
         // payload로 넘어온 새로운 배열(arrayMove 결과물)을 openTabsAtom에 설정
-        set(openTabsAtom, action.payload); 
-        break;
+        set(openTabsAtom, action.payload)
+        break
       }
       case 'CLOSE_TAB': { // 탭닫기
-        const pathToRemove = action.payload;
-        const nextTabs = currentTabs.filter(tab => tab.path !== pathToRemove);
-        set(openTabsAtom, nextTabs);
-        break;
+        const pathToRemove = action.payload
+        const nextTabs = currentTabs.filter(tab => tab.path !== pathToRemove)
+        set(openTabsAtom, nextTabs)
+        break
       }
     }
   }
-);
+)

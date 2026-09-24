@@ -1,15 +1,34 @@
-import PropTypes from "prop-types"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-react'
 
-export default function ErrorBoundary({ error }) {
+interface ValidationError {
+  field: string
+  message: string
+}
+
+interface ServerErrorResponse {
+  code?: string
+  message?: string
+  errors?: ValidationError[]
+}
+
+export interface ErrorBoundaryProps {
+  error?: {
+    message?: string
+    response?: {
+      data?: ServerErrorResponse
+    }
+  }
+}
+
+export default function ErrorBoundary({ error }: Readonly<ErrorBoundaryProps>) {
   // Spring Boot의 ErrorResponse record 구조에 접근
   // Axios 사용 시 error.response.data에 서버 응답이 담깁니다.
-  const serverError = error?.response?.data;
-  
-  const title = serverError?.code || "Error";
-  const message = serverError?.message || error?.message || "알 수 없는 에러가 발생했습니다.";
-  const validationErrors = serverError?.errors; // 우리가 만든 List<ValidationError>
+  const serverError = error?.response?.data
+
+  const title = serverError?.code || 'Error'
+  const message = serverError?.message || error?.message || '알 수 없는 에러가 발생했습니다.'
+  const validationErrors = serverError?.errors // 우리가 만든 List<ValidationError>
 
   return (
     <Alert variant="destructive">
@@ -17,7 +36,7 @@ export default function ErrorBoundary({ error }) {
       <AlertTitle>{title}</AlertTitle>
       <AlertDescription>
         <div className="mt-1">{message}</div>
-        
+
         {/* Validation 에러가 있다면 리스트로 출력 */}
         {validationErrors && validationErrors.length > 0 && (
           <ul className="mt-2 text-xs list-disc list-inside opacity-80">
@@ -31,22 +50,4 @@ export default function ErrorBoundary({ error }) {
       </AlertDescription>
     </Alert>
   )
-}
-
-ErrorBoundary.propTypes = {
-  error: PropTypes.shape({
-    message: PropTypes.string,
-    response: PropTypes.shape({
-      data: PropTypes.shape({
-        code: PropTypes.string,
-        message: PropTypes.string,
-        errors: PropTypes.arrayOf(
-          PropTypes.shape({
-            field: PropTypes.string,
-            message: PropTypes.string,
-          })
-        ),
-      }),
-    }),
-  }),
 }

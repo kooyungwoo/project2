@@ -7,8 +7,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 function PopupPage() {
   return (
@@ -24,12 +24,12 @@ function PopupPage() {
         </DialogHeader>
 
         {/* 여기에 form 들어감 */}
-        
+
         <DialogFooter>
           <Button type="submit">저장</Button>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
-                닫기
+              닫기
             </Button>
           </DialogClose>
         </DialogFooter>
