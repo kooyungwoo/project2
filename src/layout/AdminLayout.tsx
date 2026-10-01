@@ -1,16 +1,16 @@
-import { useState, useEffect, type ComponentType, type ReactNode } from 'react'
+import { useEffect, type ComponentType, type ReactNode } from 'react'
 import { useLocation, useRouter } from '@tanstack/react-router'
-import Header from '@/layout/parts/Header'
-import Sidebar from '@/layout/parts/Sidebar'
 import Footer from '@/layout/parts/Footer'
-import { TabHeader, openTabsAtom, tabActionsAtom } from '@/features/tabs'
+import { AppSidebar } from '@/layout/app-sidebar'
+import { Header } from '@/layout/header'
 import { useSetAtom, useAtomValue } from 'jotai'
+import { openTabsAtom, tabActionsAtom, TabHeader } from '@/features/tabs'
 import KeepAlive from 'react-activation'
 import { useCommonCode } from '@/features/common-code'
+import { LayoutProvider } from '@/provider/layout'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 export default function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
   const dispatch = useSetAtom(tabActionsAtom)
   const location = useLocation()
   const openTabs = useAtomValue(openTabsAtom)
@@ -79,13 +79,15 @@ export default function Layout() {
   }, [location.pathname, openTabs, dispatch, router])
 
   return (
-    <div className="flex flex-col h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar sidebarOpen={sidebarOpen} />
-        <div className="flex-1 flex flex-col min-w-0">
+    <LayoutProvider>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset className="min-w-0">
+          <Header>
+            <div className="font-semibold">관리자 대시보드</div>
+          </Header>
           <TabHeader />
-          <main className="flex-1 p-6 bg-white dark:bg-gray-900 relative overflow-hidden">
+          <main className="relative flex-1 overflow-hidden p-6">
             {openTabs.map((tab) => (
               <div
                 key={tab.path}
@@ -98,9 +100,9 @@ export default function Layout() {
               </div>
             ))}
           </main>
-        </div>
-      </div>
-      <Footer />
-    </div>
+          <Footer />
+        </SidebarInset>
+      </SidebarProvider>
+    </LayoutProvider>
   )
 }

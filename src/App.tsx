@@ -7,6 +7,7 @@ import { GlobalOverlay } from '@/components/GlobalOverlay'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Toaster } from '@/components/ui/toaster'
+import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/provider/theme'
 import { canOpenNextTab } from '@/features/tabs'
 import { AliveScope } from 'react-activation'
@@ -59,8 +60,10 @@ function App() {
           <RouterProvider router={router} />
           {/* 공통 레이어 (로딩, 에러, 알림, 컨펌) */}
           <GlobalOverlay />
-          {/* 토스트 알림 */}
+          {/* 기존 커스텀 토스트 */}
           <Toaster />
+          {/* sonner 토스트 (커스텀과 공존, 디자인 토큰 맞춤) */}
+          <SonnerToaster />
 
           {/* 개발 도구(npm run dev 상태에서만 보임) */}
           {import.meta.env.DEV && (

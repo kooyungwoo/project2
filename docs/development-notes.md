@@ -1,10 +1,10 @@
 # project2 작업 정리 노트
 
-> React CMS 관리자 템플릿 프로젝트의 구조 개선 및 TypeScript 전환 작업 기록.
+> React CMS 관리자 템플릿 프로젝트의 구조 개선, TypeScript 전환, 그리고 관리자 UI 템플릿 이식 작업 기록.
 > 이후 작업 시 참고용.
 
-- **브랜치**: `feature/20260917`
-- **상태**: 모든 변경사항 **미커밋** (검토 후 커밋 필요)
+- **브랜치**: `feature/20260924` (템플릿 이식) / `feature/20260917` (TS 전환·구조 정리, 커밋·푸시 완료)
+- **상태**: `feature/20260924`의 템플릿 이식 변경사항 **미커밋** (검토 후 커밋 필요)
 - **검증**: `tsc --noEmit` / `eslint` / `stylelint` / `vite build` 모두 통과
 
 ---
@@ -84,7 +84,7 @@
 | 1 | `lib`와 `utils` 역할 중복 | ✅ 해결 |
 | 2 | `context`와 `provider` 분리 | ✅ 해결 |
 | 3 | `AdminLayout`이 라우터 내부 API에 의존 | ✅ 해결 |
-| 4 | 사이드바 메뉴 하드코딩 | ⏳ 미해결 (다음 작업 후보) |
+| 4 | 사이드바 메뉴 하드코딩 | ✅ 해결 (`layout/data/sidebar-data.ts`로 데이터화, 단 API/권한 기반 동적 구성은 미구현) |
 | 5 | 기능 간 직접 import (`error` → `form`) | ➖ 템플릿 특성상 보류 |
 | 6 | 네이밍 규칙 혼재 | ✅ 해결 |
 | 7 | `hooks/`에 공용 인프라·도메인 훅 혼재 | ✅ 해결 |
@@ -197,7 +197,7 @@ export function DynamicFormSearch({ fields, schema, onSubmit, onPrint }) {
 src/
   App.tsx
   main.tsx
-  index.css
+  styles/                 index.css(Tailwind v4 진입), theme.css(디자인 토큰)
   App.css                 (미사용, 제거 검토)
   routeTree.gen.ts        (자동 생성)
   vite-env.d.ts
@@ -205,19 +205,23 @@ src/
   atoms/                  전역 UI 상태 (alert, confirm, error, loading ...)
   components/
     (공통) ConfirmDialog, ErrorBoundary, Global*, GridPage, Loading
-    ui/                   shadcn (button, form, input, select, dialog ...)
+    ui/                   shadcn (button, form ... + sidebar/sheet/dropdown-menu 등 템플릿 이식분)
     ui/DynamicFormField.tsx
   features/
     tabs/                 tabAtom, tabActionsAtom, useTabActions, tabPolicy, TabHeader, SortableTab, index
     common-code/          commonCodeAtom, useCommonCode, index
-  hooks/                  공용 인프라 훅 (useCommonQuery/Mutation, useConfirm, usePersisted*, useToast)
+  hooks/                  공용 인프라 훅 (useCommonQuery/Mutation, useConfirm, usePersisted*, useToast, use-mobile)
   layout/
-    AdminLayout.tsx
-    parts/                Header, Sidebar, Footer
-  lib/                    apiClient, utils(cn), sessionStorage
+    AdminLayout.tsx       SidebarProvider + AppSidebar + SidebarInset 셸
+    app-sidebar.tsx, header.tsx, nav-group.tsx, nav-user.tsx, team-switcher.tsx, types.ts
+    data/sidebar-data.ts  사이드바 메뉴 데이터
+    parts/                Footer (Header/Sidebar는 템플릿 레이아웃으로 대체)
+  lib/                    apiClient, utils(cn), sessionStorage, cookies
   pages/
     sample/{error,file,form,grid,popup}/  ← index.tsx + components/schema/services
-  provider/theme/         theme-context, theme-provider, useTheme, index
+  provider/
+    theme/                theme-context, theme-provider, useTheme, index
+    layout/               layout-provider(collapsible/variant), index
   routes/                 TanStack 파일 라우트 (URL /page/...)
   types/                  axios.d.ts, router.d.ts
 ```
@@ -226,7 +230,8 @@ src/
 
 ## 8. 다음 작업 후보 (TODO)
 
-- [ ] **4번**: 사이드바 메뉴 데이터화 (`menu.ts` config 또는 API 기반, 권한 제어 대비)
+- [x] ~~**4번**: 사이드바 메뉴 데이터화~~ → `layout/data/sidebar-data.ts`로 데이터화(템플릿 이식 시 선반영). API/권한 기반 확장은 남음
+- [ ] 사이드바 메뉴를 API/권한 기반으로 동적 구성 (현재 정적 config)
 - [ ] (확인) `useTabActions` 죽은 코드 여부 — 사용처 없으면 제거 검토
 - [ ] `DynamicFormField`에 `layout` 옵션 추가
 - [ ] `DynamicFormSearch` + `useSearchForm` 생성
@@ -235,7 +240,7 @@ src/
 - [ ] (선택) `apiClient`의 `baseURL` 하드코딩 → `import.meta.env.VITE_API_URL`
 - [ ] (선택) `sample` 폴더를 실제 도메인명으로 교체
 - [ ] (선택) 테스트 / Storybook 도입
-- [ ] **커밋** (현재 모든 변경 미커밋)
+- [ ] **커밋** (`feature/20260924` 템플릿 이식 변경 미커밋 / `feature/20260917`은 커밋·푸시 완료)
 
 ---
 
@@ -290,3 +295,83 @@ npm run lint:style:report  # SonarQube 연동용 stylelint-report.json 생성
 - 의존 import 변경: `App.tsx`(`canOpenNextTab`), `layout/AdminLayout.tsx`(`TabHeader`/`openTabsAtom`/`tabActionsAtom`/`useCommonCode`), `pages/sample/form/components/Form.tsx`, `pages/sample/grid/components/Search.tsx`
 - 빈 `src/policies/` 폴더 제거
 - ⚠️ `useTabActions`는 현재 **사용처 없음(정의만 존재)**. `tabActionsAtom` + KeepAlive `drop`과 기능이 겹쳐 **죽은 코드 후보**(다음 정리 때 확인 필요)
+
+---
+
+## 12. satnaing/shadcn-admin 템플릿 UI/레이아웃 이식 (`feature/20260924`)
+
+### 배경 / 결정
+- 후보 2개 비교:
+  - `shadcnstore/shadcn-dashboard-landing-template`: `react-router-dom` + `zustand` + Tailwind v4 → 라우팅/데이터 구조 재작성 필요.
+  - **`satnaing/shadcn-admin` 선택**: TanStack Router + TanStack Query + axios + RHF + zod가 현재 프로젝트와 동일 → 이식 비용 최소.
+- 범위: **기존 라우트/도메인/공통 인프라 유지, 템플릿의 디자인 토큰 + 레이아웃 셸만 이식**.
+
+### 1) Tailwind v3 → v4
+| 항목 | 변경 |
+| --- | --- |
+| deps 추가 | `tailwindcss@4`, `@tailwindcss/vite`, `tw-animate-css` |
+| deps 제거 | `tailwindcss-animate`, `autoprefixer`, `postcss` |
+| 삭제 | `tailwind.config.js`, `postcss.config.js`, `src/index.css` |
+| vite | `vite.config.ts`에 `@tailwindcss/vite` 플러그인 추가 |
+| 스타일 | `src/styles/index.css`(진입) + `src/styles/theme.css`(oklch 토큰, `@theme inline`) |
+| `main.tsx` | `import './styles/index.css'` |
+| `components.json` | `style: new-york`, `baseColor: slate`, `tailwind.config: ""`, `css: src/styles/index.css` |
+| stylelint | `.stylelintrc.cjs`에 v4 at-rule ignore(`custom-variant`/`utility`/`theme` 등) + `src/styles/**` override 추가 |
+
+### 2) UI 컴포넌트 추가 (템플릿 `components/ui`)
+`sidebar`, `sheet`, `tooltip`, `separator`, `skeleton`, `collapsible`, `dropdown-menu`, `avatar`, `badge`, `scroll-area` (+ radix deps: tooltip/separator/dropdown-menu/avatar/collapsible/scroll-area)
+→ 기존 `components/ui`는 유지(도메인 컴포넌트 호환). `sidebar.tsx`의 `Math.random` 린트만 `eslint-disable` 처리.
+
+### 3) 레이아웃 셸
+- 추가: `layout/app-sidebar.tsx`, `header.tsx`, `nav-group.tsx`, `nav-user.tsx`, `team-switcher.tsx`, `types.ts`, `data/sidebar-data.ts`
+- `sidebar-data.ts`의 메뉴를 샘플 라우트(`/page/sample/*`)로 데이터화 → **TODO 4번(사이드바 데이터화) 일부 선반영**
+- 추가: `provider/layout/`(collapsible/variant, cookie 저장), `lib/cookies.ts`, `hooks/use-mobile.tsx`
+- `AdminLayout`을 `LayoutProvider + SidebarProvider + AppSidebar + SidebarInset + Header` 구조로 재구성 (기존 `TabHeader`/KeepAlive/Footer 유지)
+- 제거: `layout/parts/Header.tsx`, `layout/parts/Sidebar.tsx` (테마 토글은 `nav-user`로 이동)
+- `nav-user.tsx`는 템플릿의 SignOutDialog/Clerk/settings 링크를 제거하고 단순화
+
+### 4) sonner 토스트 도입 (커스텀 토스트와 공존)
+- `sonner` 설치 후 `components/ui/sonner.tsx` 래퍼 추가, `App.tsx`에 커스텀 `<Toaster/>`와 함께 `<SonnerToaster/>` 마운트
+- 기존 커스텀 토스트(`toast.tsx`/`toaster.tsx`/`useToast`)는 그대로 유지 → **공존**
+- 디자인은 커스텀 토스트에 맞춤: `position=bottom-right`, `--normal-bg/text/border` = `popover/border` 토큰, `--border-radius = calc(var(--radius) - 2px)`, `--width = min(420px, 100vw-2rem)`, `shadow-lg`, error만 `--error-bg/text/border = destructive/white`(커스텀 destructive variant 대응)
+- 역할 분담(권장): **알림(성공/실패/정보) → sonner**, **컨펌/로딩/전역 에러 → `GlobalOverlay`(atom) 유지**
+
+### 검증
+- `tsc --noEmit` / `eslint` / `stylelint` / `vite build` 통과
+- ⚠️ 실제 화면 확인은 `npm run dev`로 육안 검증 필요 (색상/radius/폰트 토큰 적용, 사이드바 접힘·모바일 시트 동작)
+- ⚠️ 기존 도메인 컴포넌트(GlobalOverlay, GridPage 등)는 v3 시절 클래스 유지 → v4 유틸 차이(`shadow-sm`, `outline-none` 등)로 일부 시각 차이 가능. 순차 정리 필요.
+
+### 후속 후보
+- [ ] 기존 `components/ui`도 템플릿 v3 버전으로 통일 (form/select/dialog/toast 등)
+- [x] ~~`sonner` 도입 검토~~ → 커스텀 토스트와 **공존** 도입, 디자인은 커스텀에 맞춰 토큰 매핑 (`components/ui/sonner.tsx`)
+- [ ] `apiClient` 인터셉터의 오류 라우팅을 13번 정책에 맞게 분기 (지속 UI vs 토스트)
+- [ ] 대시보드/차트(recharts)·데이터테이블(TanStack Table) 필요 시 선택 이식
+- [ ] `libraries.md` 갱신 (Tailwind v4 및 추가 radix 패키지) — 파일 인코딩 확인 필요
+
+---
+
+## 13. 알림 / 오류 처리 정책 (결정)
+
+> 토스트는 "알림"이지 **오류 처리의 만능 도구가 아니다.** 사라지는 특성 때문에 사용자가 기억하거나 대응해야 하는 오류엔 부적합하다.
+
+### 판단 기준 (에러/정보가 아니라 "사용자가 뭘 해야 하는가")
+1. 사용자가 **행동**해야 하거나, **왜 진행이 막히는지** 알아야 하는가? → **지속 UI**(인라인/모달/배너). **토스트 금지**
+2. 사용자가 **이미 자기 행동**을 알고, 결과가 **행동 불필요한 단발성 확인**인가? → **토스트 허용**
+
+### 상황별 매핑
+| 상황 | UI | 예 |
+| --- | --- | --- |
+| 폼 검증 실패 | RHF 인라인(`FormMessage`) | 필수값 누락 |
+| zod가 못 잡는 비즈니스/서버 거부 | `GlobalOverlay` alert (지속) | 이미 등록된 코드, 권한 없음, 잔액 부족 |
+| 치명/전역 오류 | `GlobalOverlay` / `ErrorBoundary` | 500, 세션 만료 |
+| 재시도 가능한 일시 실패 | sonner 토스트 (+`다시 시도` 액션) | 네트워크 타임아웃 |
+| 단발성 확인(fire-and-forget) | sonner 토스트 (하단 우측) | 설치되었습니다, 변환되었습니다 |
+| 백그라운드 완료 | sonner 토스트 (긴 duration, `보기` 액션) | 대량 변환 완료 |
+
+### 위치 논의 결론
+- 하단 우측은 "**안 봐도 되는 알림**"에만 쓴다. 외워야 하는 건 토스트로 보내지 않으므로 "안 보임"이 문제가 되지 않는다.
+- "웹은 시선이 우하단으로 가지 않는다"는 지적은 타당 → 그래서 **중요한 건 토스트가 아니라 지속 UI**로 처리한다.
+- 필요 시 반응형 위치(데스크톱 `bottom-right`, 모바일 `top-center`) 적용 가능. 현재는 `bottom-right` 고정.
+
+### 한 줄 규칙
+> 알림을 안 봐도 다음 행동이 가능하고, 방금 한 행동의 결과임이 자명하면 토스트. 그 외는 지속 UI.
