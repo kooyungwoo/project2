@@ -1,0 +1,18 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "project": {
+    "name": "project2",
+    "root": "./",
+    "repository": "https://github.com/kooyungwoo/project2"
+  },
+  "model": "deepseek-v4.1-flash",
+  "instructions": [
+    "항상 작업 시작 전 `doc/PROJECT_STATE.md` 파일이 존재하면 내용을 확인하여 이전 세션의 컨텍스트와 다음 작업 목록을 파악하세요."
+  ],
+  "commands": {
+    "update-state": {
+      "description": "현재 세션 작업 내용을 doc/PROJECT_STATE.md 파일에 요약 덮어쓰기",
+      "template": "현재 세션에서 구현/수정한 주요 내용, 관련 파일, 다음 진행할 작업을 정리해서 `@doc/PROJECT_STATE.md` 파일에 최신 상태로 업데이트(덮어쓰기)해줘. 200줄 이내로 핵심만 압축해서 작성해줘."
+    }
+  }
+}
